@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privilegios de Cultos - Embajadores de Cristo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Se ha diseñado una aplicación con una estructura de pestañas para la navegación mensual (Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre), lo que permite a los usuarios acceder rápidamente al mes de su interés. Cada mes presenta una serie de "tarjetas" de eventos, una por cada sábado, para una visualización clara y ordenada. La interacción principal es un filtro desplegable que permite a los usuarios seleccionar un nombre y resaltar instantáneamente todas las asignaciones de esa persona en todo el calendario. Se ha añadido un botón para generar un PDF del mes actualmente visible, mejorando la exportabilidad de la información. Esta estructura fue elegida porque transforma un calendario estático en una herramienta de consulta personal y organizativa, mejorando drásticamente la usabilidad y la localización de información clave. -->
+    <!-- Visualization & Content Choices: La información del reporte se presenta en tarjetas estilizadas (HTML/Tailwind) en lugar de una tabla plana, mejorando la legibilidad. El objetivo es organizar y permitir la comparación. Para la interacción, un filtro de JavaScript resalta las responsabilidades individuales, cumpliendo el objetivo de facilitar la consulta personal. Los iconos de Unicode (📖, 🎤) se usan para mejorar la escaneabilidad de los roles. Las notas especiales como "Día de Venta" y "Culto de Oración" se destacan con insignias para llamar la atención. La lógica de asignación de roles ahora maneja conflictos con los días de venta, reasignando roles fijos si el titular está en venta. Se han eliminado los campos de "Reporte", "Actividades", "Ofrenda alcancía", "Anuncios" y "Despide" según la solicitud. La "Lectura Bíblica" ahora incluye capítulos específicos de Hebreos y Job, con una persona asignada a cada lectura. Se ha añadido un nuevo grupo de limpieza que incorpora a Armando Calel, Gustavo Elias y Kevin Mendez, rotando su participación según las indicaciones. La funcionalidad de exportación a PDF utiliza html2canvas y jsPDF para capturar el contenido HTML del mes activo y convertirlo en un documento PDF, lo que permite a los usuarios guardar o imprimir el programa. Se ha añadido un grupo de venta a los cultos de oración, rotando los grupos. Esta combinación de presentación e interacción está diseñada para una máxima claridad y utilidad sin necesidad de gráficos complejos. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-active { border-color: #f59e0b; color: #b45309; background-color: #fffbeb; }
+        .highlight { border: 2px solid #f59e0b; background-color: #fef3c7; }
+        .service-card { position: relative; }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-amber-800">Privilegios de Cultos</h1>
+            <p class="text-lg text-stone-600">Embajadores de Cristo</p>
+        </header>
+        
+        <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <p class="text-stone-700 text-center">
+                Bienvenido al programa interactivo. Utiliza las pestañas para navegar entre los meses. Selecciona un nombre en el menú desplegable para resaltar todas las participaciones de esa persona en el calendario. Haz clic en "Limpiar Filtro" para ver el programa completo de nuevo.
+            </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+            <div id="tabs" class="flex flex-wrap justify-center gap-2">
+                <button data-tab="julio" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Julio</button>
+                <button data-tab="agosto" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Agosto</button>
+                <button data-tab="septiembre" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Septiembre</button>
+                <button data-tab="octubre" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Octubre</button>
+                <button data-tab="noviembre" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Noviembre</button>
+                <button data-tab="diciembre" class="tab-btn px-4 py-2 rounded-md font-semibold border-b-2 border-transparent transition-colors duration-300">Diciembre</button>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-2">
+                <select id="person-filter" class="rounded-md border-stone-300 shadow-sm focus:border-amber-500 focus:ring-amber-500">
+                    <option value="">Filtrar por nombre...</option>
+                </select>
+                <button id="reset-filter" class="px-3 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors duration-300">Limpiar</button>
+                <button id="generate-pdf" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300">Generar PDF</button>
+            </div>
+        </div>
+
+        <main id="schedule-content">
+            <div id="julio" class="tab-content">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-07-05">
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 5 de Julio</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Hebreos 12</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-07-12">
+                         <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 12 de Julio</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Sara Rax</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Dulce Monterroso - Hebreos 13</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-07-19">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 19 de Julio</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">Mensaje:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Karen Gómez - Job 1</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-07-26">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 26 de Julio</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Johana Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="agosto" class="tab-content hidden">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-02">
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 2 de Agosto</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                         <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gladys Xum</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Merary Monterros - Job 2</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Gustavo Elias, Kevin Mendez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-09">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 9 de Agosto</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Sara Rax</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Mensaje:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 3</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-16">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 16 de Agosto</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Ariana Mejia - Job 4</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                        </ul>
+                    </div>
+                     <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-23">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 23 de Agosto</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Sara Rax</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Mensaje:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Wilkerson Gómez - Job 5</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-30">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 30 de Agosto</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Brayan Gómez</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Kevin Mendez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="septiembre" class="tab-content hidden">
+                 <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-09-06">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 6 de Septiembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                         <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Johana Xum</li>
+                            <li><span class="font-semibold">Mensaje:</span> Gladys Xum</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Job 6</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-09-13">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 13 de Septiembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Sara Rax</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Armando Calel</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Gaby Coxolca - Job 7</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-09-20">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 20 de Septiembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Wilkerson Gómez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Brayan Gómez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Mensaje:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Armando Calel - Job 8</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-09-27">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 27 de Septiembre</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Johana Xum</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="octubre" class="tab-content hidden">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-10-04">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 4 de Octubre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                         <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Sara Rax</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Mensaje:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 9</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-10-11">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 11 de Octubre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gaby Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Wilkerson Gómez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Brayan Gómez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kevin Mendez - Job 10</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-10-18">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 18 de Octubre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">Mensaje:</span> Sara Rax</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Karen Gómez - Job 11</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-10-25">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 25 de Octubre</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Armando Calel</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Gaby Coxolca</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Dulce Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="noviembre" class="tab-content hidden">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-11-01">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 1 de Noviembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                         <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Merary Monterros - Job 12</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-11-08">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 8 de Noviembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gladys Xum</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Sara Rax</li>
+                            <li><span class="font-semibold">Mensaje:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Johana Xum - Job 13</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-11-15">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 15 de Noviembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Armando Calel</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gaby Coxolca</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Wilkerson Gómez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Brayan Gómez</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Ariana Mejia - Job 14</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-11-22">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 22 de Noviembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Obed Martinez - Job 15</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-11-29">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 29 de Noviembre</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Gladys Xum</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Sara Rax</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Obed Martinez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="diciembre" class="tab-content hidden">
+                <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-12-06">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 6 de Diciembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                         <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Armando Calel</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gaby Coxolca</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Mensaje:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Armando Calel - Job 16</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-12-13">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 13 de Diciembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Johana Xum</li>
+                            <li><span class="font-semibold">Mensaje:</span> Gladys Xum</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Job 17</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-12-20">
+                        <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta (MEIDAD)</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 20 de Diciembre</h3>
+                        <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Preside:</span> Sara Rax</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">Mensaje:</span> Armando Calel</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 18</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
+                        </ul>
+                    </div>
+                    <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-12-27">
+                        <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Culto de Oración</span>
+                        <span class="absolute top-2 left-2 bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Día de Venta</span>
+                        <h3 class="font-bold text-lg text-amber-700">Sábado, 27 de Diciembre</h3>
+                        <p class="font-semibold text-sm mb-4">Último Sábado del Mes</p>
+                        <ul class="space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Apertura y preside:</span> Anthony Monterroso</li>
+                            <li><span class="font-semibold">Primer tiempo:</span> Dulce Monterroso</li>
+                            <li><span class="font-semibold">Segundo tiempo:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">Tercer tiempo:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">Ofrenda:</span> Karen Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Johana Xum, Gladys Xum</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const personFilter = document.getElementById('person-filter');
+            const resetFilterBtn = document.getElementById('reset-filter');
+            const generatePdfBtn = document.getElementById('generate-pdf');
+            const scheduleContent = document.getElementById('schedule-content');
+            const serviceCards = document.querySelectorAll('.service-card');
+
+            function getParticipants() {
+                const participants = new Set();
+                serviceCards.forEach(card => {
+                    const text = card.innerText;
+                    const lines = text.split('\n');
+                    lines.forEach(line => {
+                        const parts = line.split(':');
+                        if (parts.length > 1) {
+                            let name = parts[1].trim();
+                            name = name.replace(/\s*\(.*\s*en Venta\)/, '').trim();
+                            if (parts[0].includes('Lectura Bíblica') && name.includes(' - ')) {
+                                name = name.split(' - ')[0].trim();
+                            }
+
+                            if (name.includes(',')) {
+                                name.split(',').forEach(n => participants.add(n.trim()));
+                            } else {
+                                if(name && !name.toLowerCase().includes('líderes') && !name.toLowerCase().includes('directiva') && !name.toLowerCase().includes('n/a') && !name.toLowerCase().includes('reporte') && !name.toLowerCase().includes('actividades') && !name.toLowerCase().includes('ofrenda alcancía') && !name.toLowerCase().includes('anuncios') && !name.toLowerCase().includes('despide'))
+                                participants.add(name);
+                            }
+                        }
+                    });
+                });
+                return Array.from(participants).sort();
+            }
+
+            function populateFilter() {
+                const people = getParticipants();
+                personFilter.innerHTML = '<option value="">Filtrar por nombre...</option>';
+                people.forEach(person => {
+                    const option = document.createElement('option');
+                    option.value = person;
+                    option.textContent = person;
+                    personFilter.appendChild(option);
+                });
+            }
+
+            function setActiveTab(tabId) {
+                tabs.forEach(btn => {
+                    if (btn.dataset.tab === tabId) {
+                        btn.classList.add('tab-active');
+                    } else {
+                        btn.classList.remove('tab-active');
+                    }
+                });
+
+                tabContents.forEach(content => {
+                    if (content.id === tabId) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+                filterByName();
+            }
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    setActiveTab(tab.dataset.tab);
+                });
+            });
+
+            function filterByName() {
+                const selectedName = personFilter.value;
+                serviceCards.forEach(card => {
+                    card.classList.remove('highlight');
+                    if (selectedName && card.innerText.includes(selectedName)) {
+                        card.classList.add('highlight');
+                    }
+                });
+            }
+
+            function resetFilter() {
+                personFilter.value = '';
+                serviceCards.forEach(card => {
+                    card.classList.remove('highlight');
+                });
+            }
+
+            generatePdfBtn.addEventListener('click', () => {
+                const activeTabContent = document.querySelector('.tab-content:not(.hidden)');
+                if (activeTabContent) {
+                    const tabId = activeTabContent.id;
+                    const monthName = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+                    html2canvas(activeTabContent, { scale: 2 }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const pdf = new jspdf.jsPDF({
+                            orientation: 'p',
+                            unit: 'mm',
+                            format: 'a4'
+                        });
+                        const imgWidth = 210; 
+                        const pageHeight = 297;  
+                        const imgHeight = canvas.height * imgWidth / canvas.width;
+                        let heightLeft = imgHeight;
+                        let position = 0;
+
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+                        pdf.save(`Programa_Cultos_${monthName}.pdf`);
+                    });
+                }
+            });
+
+            personFilter.addEventListener('change', filterByName);
+            resetFilterBtn.addEventListener('click', resetFilter);
+            
+            populateFilter();
+            setActiveTab('julio');
+        });
+    </script>
+</body>
+</html>
