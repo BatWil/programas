@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Chosen Palette: Warm Neutrals -->
     <!-- Application Structure Plan: Se ha diseñado una aplicación con una estructura de pestañas para la navegación mensual (Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre), lo que permite a los usuarios acceder rápidamente al mes de su interés. Cada mes presenta una serie de "tarjetas" de eventos, una por cada sábado, para una visualización clara y ordenada. La interacción principal es un filtro desplegable que permite a los usuarios seleccionar un nombre y resaltar instantáneamente todas las asignaciones de esa persona en todo el calendario. Se ha añadido un botón para generar un PDF del mes actualmente visible, mejorando la exportabilidad de la información. Esta estructura fue elegida porque transforma un calendario estático en una herramienta de consulta personal y organizativa, mejorando drásticamente la usabilidad y la localización de información clave. -->
-    <!-- Visualization & Content Choices: La información del reporte se presenta en tarjetas estilizadas (HTML/Tailwind) en lugar de una tabla plana, mejorando la legibilidad. El objetivo es organizar y permitir la comparación. Para la interacción, un filtro de JavaScript resalta las responsabilidades individuales, cumpliendo el objetivo de facilitar la consulta personal. Las notas especiales como "Día de Venta" y "Culto de Oración" se destacan con insignias para llamar la atención. La lógica de asignación de roles ahora maneja conflictos con los días de venta, reasignando roles fijos si el titular está en venta. Se han eliminado los campos de "Reporte", "Actividades", "Ofrenda alcancía", "Anuncios" y "Despide" según la solicitud. La "Lectura Bíblica" ahora incluye capítulos específicos de Hebreos y Job, con una persona asignada a cada lectura. Se ha añadido un nuevo grupo de limpieza que incorpora a Armando Calel, Gustavo Elias y Kevin Mendez, rotando su participación según las indicaciones. La funcionalidad de exportación a PDF utiliza html2canvas y jsPDF para capturar el contenido HTML del mes activo y convertirlo en un documento PDF, lo que permite a los usuarios guardar o imprimir el programa. Se ha añadido un grupo de venta a los cultos de oración, rotando los grupos. Se ha modificado la visualización de los días de venta de MEIDAD para no mostrar el grupo de venta asignado, manteniendo la etiqueta "Día de Venta (MEIDAD)". Se ha corregido la lógica de asignación de privilegios para asegurar que ninguna persona tenga más de un privilegio en el mismo día. Esta combinación de presentación e interacción está diseñada para una máxima claridad y utilidad sin necesidad de gráficos complejos. -->
+    <!-- Visualization & Content Choices: La información del reporte se presenta en tarjetas estilizadas (HTML/Tailwind) en lugar de una tabla plana, mejorando la legibilidad. El objetivo es organizar y permitir la comparación. Para la interacción, un filtro de JavaScript resalta las responsabilidades individuales, cumpliendo el objetivo de facilitar la consulta personal. Los iconos de Unicode (📖, 🎤) se usan para mejorar la escaneabilidad de los roles. Las notas especiales como "Día de Venta" y "Culto de Oración" se destacan con insignias para llamar la atención. La lógica de asignación de roles ahora maneja conflictos con los días de venta, reasignando roles fijos si el titular está en venta. Se han eliminado los campos de "Reporte", "Actividades", "Ofrenda alcancía", "Anuncios" y "Despide" según la solicitud. La "Lectura Bíblica" ahora incluye capítulos específicos de Hebreos y Job, con una persona asignada a cada lectura. Se ha añadido un nuevo grupo de limpieza que incorpora a Armando Calel, Gustavo Elias y Kevin Mendez, rotando su participación según las indicaciones. La funcionalidad de exportación a PDF utiliza html2canvas y jsPDF para capturar el contenido HTML del mes activo y convertirlo en un documento PDF, lo que permite a los usuarios guardar o imprimir el programa. Se ha añadido un grupo de venta a los cultos de oración, rotando los grupos. Se ha modificado la visualización de los días de venta de MEIDAD para no mostrar el grupo de venta asignado, manteniendo la etiqueta "Día de Venta (MEIDAD)". Se ha corregido la lógica de asignación de privilegios para asegurar que ninguna persona tenga más de un privilegio en el mismo día y que los encargados de venta no tengan otras asignaciones. Esta combinación de presentación e interacción está diseñada para una máxima claridad y utilidad sin necesidad de gráficos complejos. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -62,10 +62,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kimberly Coxolca - Hebreos 12</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Hebreos 12</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
                         </ul>
                     </div>
@@ -75,10 +75,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Sara Rax</li>
-                            <li><span class="font-semibold">Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Mensaje:</span> Anthony Monterroso</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Dulce Monterroso - Hebreos 13</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Dulce Monterroso - Hebreos 13</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
                         </ul>
@@ -89,10 +89,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Kevin Mendez</li>
-                            <li><span class="font-semibold">Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Kimberly Coxolca</li>
                             <li><span class="font-semibold">Mensaje:</span> Sara Rax</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Johana Xum - Job 1</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Johana Xum - Job 1</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
                         </ul>
                     </div>
@@ -121,10 +121,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                          <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gladys Xum</li>
-                            <li><span class="font-semibold">Alabanza:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gustavo Elias</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Mensaje:</span> Karen Gómez</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Merary Monterros - Job 2</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Merary Monterros - Job 2</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Gustavo Elias, Kevin Mendez</li>
                         </ul>
@@ -135,12 +135,12 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
-                            <li><span class="font-semibold">Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Johana Xum - Job 3</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Johana Xum - Job 3</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
-                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
                         </ul>
                     </div>
                     <div class="service-card bg-white p-6 rounded-lg shadow-sm" data-date="2025-08-16">
@@ -149,10 +149,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Dulce Monterroso</li>
-                            <li><span class="font-semibold">Alabanza:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gustavo Elias</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Mensaje:</span> Karen Gómez</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Ariana Mejia - Job 4</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Ariana Mejia - Job 4</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
                         </ul>
                     </div>
@@ -162,10 +162,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
-                            <li><span class="font-semibold">Alabanza:</span> Sara Rax</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Sara Rax</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Mensaje:</span> Obed Martinez</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Merary Monterros - Job 5</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Merary Monterros - Job 5</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
                         </ul>
@@ -196,10 +196,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                          <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Karen Gómez</li>
-                            <li><span class="font-semibold">Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Johana Xum</li>
                             <li><span class="font-semibold">Mensaje:</span> Gladys Xum</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kimberly Coxolca - Job 6</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Job 6</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
                         </ul>
@@ -210,10 +210,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Sara Rax</li>
-                            <li><span class="font-semibold">Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Mensaje:</span> Armando Calel</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Gaby Coxolca - Job 7</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Gaby Coxolca - Job 7</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
                         </ul>
@@ -224,10 +224,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kimberly Coxolca - Job 8</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Job 8</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
                         </ul>
                     </div>
@@ -257,10 +257,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                          <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Kimberly Coxolca</li>
-                            <li><span class="font-semibold">Alabanza:</span> Ariana Mejia</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Mensaje:</span> Gaby Coxolca</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Merary Monterros - Job 9</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Merary Monterros - Job 9</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
                         </ul>
@@ -271,10 +271,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gaby Coxolca</li>
-                            <li><span class="font-semibold">Alabanza:</span> Gustavo Elias</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gustavo Elias</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Johana Xum - Job 10</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Johana Xum - Job 10</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
                         </ul>
@@ -285,10 +285,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kimberly Coxolca</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Sara Rax</li>
                             <li><span class="font-semibold">Mensaje:</span> Ariana Mejia</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Obed Martinez - Job 11</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Obed Martinez - Job 11</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
                         </ul>
                     </div>
@@ -318,10 +318,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                          <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Merary Monterros - Job 12</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 12</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
                         </ul>
@@ -332,10 +332,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gladys Xum</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kimberly Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kimberly Coxolca</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Sara Rax</li>
                             <li><span class="font-semibold">Mensaje:</span> Ariana Mejia</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Johana Xum - Job 13</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Johana Xum - Job 13</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
                         </ul>
@@ -346,10 +346,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Armando Calel</li>
-                            <li><span class="font-semibold">Alabanza:</span> Gaby Coxolca</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Gaby Coxolca</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Mensaje:</span> Gustavo Elias</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kevin Mendez - Job 14</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kevin Mendez - Job 14</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
                         </ul>
                     </div>
@@ -359,10 +359,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gustavo Elias</li>
-                            <li><span class="font-semibold">Alabanza:</span> Kevin Mendez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Kevin Mendez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Mensaje:</span> Merary Monterros</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Obed Martinez - Job 15</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Obed Martinez - Job 15</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Wilkerson Gómez, Brayan Gómez</li>
                         </ul>
@@ -379,7 +379,7 @@
                             <li><span class="font-semibold">Tercer tiempo:</span> Ariana Mejia</li>
                             <li><span class="font-semibold">Ofrenda:</span> Merary Monterros</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
-                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Dulce Monterroso, Anthony Monterroso</li>
+                            <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
                         </ul>
                     </div>
                 </div>
@@ -393,10 +393,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                          <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Gaby Coxolca</li>
-                            <li><span class="font-semibold">Alabanza:</span> Karen Gómez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Karen Gómez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Merary Monterros</li>
                             <li><span class="font-semibold">Mensaje:</span> Kimberly Coxolca</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Sara Rax - Job 16</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 16</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Wilkerson Gómez, Brayan Gómez</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Karen Gómez, Vanessa Orozco</li>
                         </ul>
@@ -407,10 +407,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Karen Gómez</li>
-                            <li><span class="font-semibold">Alabanza:</span> Merary Monterros</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Merary Monterros</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Johana Xum</li>
                             <li><span class="font-semibold">Mensaje:</span> Gladys Xum</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kimberly Coxolca - Job 17</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Kimberly Coxolca - Job 17</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Venta:</span> Dulce Monterroso, Anthony Monterroso</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Johana Xum, Gladys Xum</li>
                         </ul>
@@ -421,10 +421,10 @@
                         <p class="font-semibold text-sm mb-4">Culto de Embajadores de Cristo</p>
                         <ul class="space-y-2 text-stone-700">
                             <li><span class="font-semibold">Preside:</span> Ariana Mejia</li>
-                            <li><span class="font-semibold">Alabanza:</span> Obed Martinez</li>
+                            <li><span class="font-semibold">🎤 Alabanza:</span> Obed Martinez</li>
                             <li><span class="font-semibold">Ofrenda general:</span> Armando Calel</li>
                             <li><span class="font-semibold">Mensaje:</span> Gaby Coxolca</li>
-                            <li><span class="font-semibold">Lectura Bíblica:</span> Kimberly Coxolca - Job 18</li>
+                            <li><span class="font-semibold">📖 Lectura Bíblica:</span> Sara Rax - Job 18</li>
                             <li class="pt-2"><span class="font-semibold text-xs text-stone-500">Limpieza:</span> Armando Calel, Gustavo Elias, Kevin Mendez</li>
                         </ul>
                     </div>
